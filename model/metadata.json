@@ -1,0 +1,162 @@
+{
+  "target_name": "MEDV",
+  "target_unit": "milliers de dollars (1000 $)",
+  "features": [
+    {
+      "name": "CRIM",
+      "label": "Taux de criminalite par ville",
+      "unit": "taux",
+      "step": 2,
+      "min": 0.00632,
+      "max": 88.9762,
+      "median": 0.257,
+      "mean": 3.614,
+      "is_binary": false
+    },
+    {
+      "name": "ZN",
+      "label": "% de terrains residentiels > 25 000 pieds2",
+      "unit": "%",
+      "step": 2,
+      "min": 0.0,
+      "max": 100.0,
+      "median": 0.0,
+      "mean": 11.364,
+      "is_binary": false
+    },
+    {
+      "name": "INDUS",
+      "label": "% de surfaces commerciales non-retail",
+      "unit": "%",
+      "step": 2,
+      "min": 0.46,
+      "max": 27.74,
+      "median": 9.69,
+      "mean": 11.137,
+      "is_binary": false
+    },
+    {
+      "name": "CHAS",
+      "label": "Borde la riviere Charles (0 = non, 1 = oui)",
+      "unit": "",
+      "step": 0,
+      "min": 0.0,
+      "max": 1.0,
+      "median": 0.0,
+      "mean": 0.069,
+      "is_binary": true
+    },
+    {
+      "name": "NOX",
+      "label": "Concentration en oxydes d'azote",
+      "unit": "ppm",
+      "step": 3,
+      "min": 0.385,
+      "max": 0.871,
+      "median": 0.538,
+      "mean": 0.555,
+      "is_binary": false
+    },
+    {
+      "name": "RM",
+      "label": "Nombre moyen de pieces par logement",
+      "unit": "pieces",
+      "step": 2,
+      "min": 3.561,
+      "max": 8.78,
+      "median": 6.208,
+      "mean": 6.285,
+      "is_binary": false
+    },
+    {
+      "name": "AGE",
+      "label": "% de logements construits avant 1940",
+      "unit": "%",
+      "step": 2,
+      "min": 2.9,
+      "max": 100.0,
+      "median": 77.5,
+      "mean": 68.575,
+      "is_binary": false
+    },
+    {
+      "name": "DIS",
+      "label": "Distance ponderee aux 5 centres d'emploi",
+      "unit": "miles",
+      "step": 3,
+      "min": 1.1296,
+      "max": 12.1265,
+      "median": 3.207,
+      "mean": 3.795,
+      "is_binary": false
+    },
+    {
+      "name": "RAD",
+      "label": "Indice d'accessibilite aux autoroutes",
+      "unit": "indice",
+      "step": 1,
+      "min": 1.0,
+      "max": 24.0,
+      "median": 5.0,
+      "mean": 9.549,
+      "is_binary": false
+    },
+    {
+      "name": "TAX",
+      "label": "Taux de taxe fonciere pour 10 000 $",
+      "unit": "$/10k$",
+      "step": 1,
+      "min": 187.0,
+      "max": 711.0,
+      "median": 330.0,
+      "mean": 408.237,
+      "is_binary": false
+    },
+    {
+      "name": "PTRATIO",
+      "label": "Ratio eleves / enseignants par ville",
+      "unit": "ratio",
+      "step": 2,
+      "min": 12.6,
+      "max": 22.0,
+      "median": 19.05,
+      "mean": 18.456,
+      "is_binary": false
+    },
+    {
+      "name": "B",
+      "label": "1000(Bk - 0.63)^2 ou Bk = % de residents noirs",
+      "unit": "indice",
+      "step": 2,
+      "min": 0.32,
+      "max": 396.9,
+      "median": 391.44,
+      "mean": 356.674,
+      "is_binary": false
+    },
+    {
+      "name": "LSTAT",
+      "label": "% de population a bas statut social",
+      "unit": "%",
+      "step": 2,
+      "min": 1.73,
+      "max": 37.97,
+      "median": 11.36,
+      "mean": 12.653,
+      "is_binary": false
+    }
+  ],
+  "metrics": {
+    "r2_test": 0.877109,
+    "mae_test": 2.2488,
+    "n_train": 404,
+    "n_test": 102
+  },
+  "n_samples": 506,
+  "target": {
+    "min": 5.0,
+    "max": 50.0,
+    "mean": 22.533,
+    "median": 21.2
+  }
+}

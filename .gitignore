@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Donnees generees a l'execution
+data/predictions.csv
+
+# Logs du serveur local
+server.log
+server.err.log
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS / editeurs
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

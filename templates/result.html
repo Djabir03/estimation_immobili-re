@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Estimation — Estimation immobiliere{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Resultat de l'estimation</h1>
+  <p>Prix estime par le modele XGBoost a partir des caracteristiques saisies.</p>
+</div>
+
+<div class="price-hero">
+  <div class="eyebrow">Prix estime</div>
+  <div class="amount">{{ price_text }}</div>
+  <div class="sub">soit {{ "%.2f"|format(price) }} milliers de dollars</div>
+  <div class="range">
+    Fourchette indicative : {{ low_text }} &ndash; {{ high_text }}
+    <span class="muted">&plusmn; MAE</span>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <div class="k">Mediane du marche</div>
+    <div class="v">{{ target_median_text }}</div>
+  </div>
+  <div class="stat">
+    <div class="k">Ecart a la mediane</div>
+    <div class="v" style="color: {{ 'var(--green)' if price >= meta.target.median else 'var(--red)' }}">
+      {{ '+' if price >= meta.target.median else '' }}{{ "%.1f"|format(price - meta.target.median) }} k$
+    </div>
+  </div>
+  <div class="stat">
+    <div class="k">Fiabilite (R&sup2; test)</div>
+    <div class="v">{{ metrics.r2_test }}</div>
+  </div>
+  <div class="stat">
+    <div class="k">Erreur moyenne (MAE)</div>
+    <div class="v">{{ metrics.mae_test }} k$</div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:20px">
+  <h2 class="card-title">Detail des donnees utilisees</h2>
+  <p class="card-sub">Ces valeurs ont ete enregistrees dans l'historique.</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Variable</th>
+          <th class="hide-sm">Description</th>
+          <th class="num">Valeur</th>
+          <th class="num">Mediane</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for name, value in values.items() %}
+          {% set f = features[name] %}
+          <tr>
+            <td><span class="code">{{ name }}</span></td>
+            <td class="hide-sm">{{ f.label }}</td>
+            <td class="num"><strong>{{ value }}</strong>{% if f.unit %} <span class="muted small">{{ f.unit }}</span>{% endif %}</td>
+            <td class="num muted">{{ f.median }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="inline-actions" style="margin-top:22px">
+  <a href="{{ url_for('index') }}" class="btn btn-primary">Nouvelle estimation</a>
+  <a href="{{ url_for('history') }}" class="btn btn-ghost">Voir l'historique</a>
+</div>
+{% endblock %}

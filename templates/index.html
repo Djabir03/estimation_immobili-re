@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Nouvelle estimation — Estimation immobiliere{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Saisir les donnees du logement</h1>
+  <p>
+    Renseignez les 13 caracteristiques ci-dessous, puis lancez l'estimation.
+    Les champs sont pre-remplis avec les valeurs medianes du jeu de donnees :
+    modifiez uniquement ce que vous connaissez.
+  </p>
+</div>
+
+{% if errors %}
+  <div class="alert alert-error">
+    Certains champs sont invalides ({{ errors|length }}). Corrigez-les puis relancez l'estimation.
+  </div>
+{% endif %}
+
+<form method="post" action="{{ url_for('predict_route') }}" class="card" novalidate>
+  {% for title, subtitle, names in groups %}
+  <fieldset class="fieldset">
+    <div class="legend">
+      <strong>{{ title }}</strong>
+      <span>{{ subtitle }}</span>
+    </div>
+    <div class="grid">
+      {% for name in names %}
+        {% set f = features[name] %}
+        <div class="field {{ 'has-error' if errors.get(name) }}">
+          <label for="{{ name }}">
+            <span class="code">{{ name }}</span>
+            <span class="lbl">{{ f.label }}</span>
+          </label>
+
+          {% if f.is_binary %}
+            <select id="{{ name }}" name="{{ name }}">
+              <option value="0" {{ 'selected' if values[name]|float == 0 }}>Non (0)</option>
+              <option value="1" {{ 'selected' if values[name]|float == 1 }}>Oui (1)</option>
+            </select>
+          {% else %}
+            <input
+              type="number"
+              id="{{ name }}"
+              name="{{ name }}"
+              value="{{ values[name] }}"
+              step="{{ f.step }}"
+              min="{{ f.min }}"
+              max="{{ f.max }}"
+              inputmode="decimal">
+          {% endif %}
+
+          {% if errors.get(name) %}
+            <span class="err">{{ errors[name] }}</span>
+          {% else %}
+            <span class="hint">
+              {% if f.unit %}{{ f.unit }} &middot; {% endif %}observe : {{ "%.4g"|format(f.min) }} a {{ "%.4g"|format(f.max) }}
+            </span>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </fieldset>
+  {% endfor %}
+
+  <div class="actions">
+    <button type="submit" class="btn btn-primary">Estimer le prix</button>
+    <button type="reset" class="btn btn-ghost">Reinitialiser</button>
+    <span class="muted small" style="margin-left:auto">
+      Mediane du marche : {{ "%.1f"|format(meta.target.median) }} k$ ({{ meta.target.median|prix }})
+    </span>
+  </div>
+</form>
+
+<div class="card">
+  <h2 class="card-title">Import de plusieurs logements (CSV)</h2>
+  <p class="card-sub">
+    Un fichier CSV avec une ligne d'en-tete et les colonnes
+    <span class="mono">{{ feature_names|join(', ') }}</span>.
+    Une estimation est renvoyee pour chaque ligne.
+  </p>
+  <form method="post" action="{{ url_for('batch') }}" enctype="multipart/form-data" class="inline-actions">
+    <input type="file" name="fichier" accept=".csv,text/csv" required>
+    <button type="submit" class="btn btn-ghost">Estimer le lot</button>
+    <a href="{{ url_for('batch_template') }}" class="small">Telecharger un modele de CSV</a>
+  </form>
+</div>
+{% endblock %}

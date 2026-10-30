@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Historique — Estimation immobiliere{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Historique des estimations</h1>
+  <p>{{ total }} estimation(s) enregistree(s) dans <span class="mono">data/predictions.csv</span>.</p>
+</div>
+
+{% if rows %}
+  <div class="inline-actions" style="margin-bottom:18px">
+    <a href="{{ url_for('history_csv') }}" class="btn btn-ghost">Exporter en CSV</a>
+    <form method="post" action="{{ url_for('history_clear') }}"
+          onsubmit="return confirm('Effacer definitivement tout l\'historique ?');">
+      <button type="submit" class="btn btn-danger">Effacer l'historique</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th class="num">Prix estime</th>
+            <th class="num">Prix ($)</th>
+            {% for f in features %}
+              <th class="num">{{ f.name }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in rows %}
+            <tr>
+              <td class="muted">{{ loop.index }}</td>
+              <td class="mono">{{ row.horodatage }}</td>
+              <td class="num"><strong>{{ row.prix_milliers }}</strong> k$</td>
+              <td class="num">{{ row.prix_dollars }}</td>
+              {% for f in features %}
+                <td class="num muted">{{ row[f.name] }}</td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% else %}
+  <div class="card empty">
+    <span class="big">&#128203;</span>
+    Aucune estimation pour le moment.
+    <div style="margin-top:16px">
+      <a href="{{ url_for('index') }}" class="btn btn-primary">Faire une premiere estimation</a>
+    </div>
+  </div>
+{% endif %}
+{% endblock %}

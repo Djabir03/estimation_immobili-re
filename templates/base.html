@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Estimation immobiliere{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#127968;</text></svg>">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="{{ url_for('index') }}">
+        <span class="brand-mark">&#127968;</span>
+        <span>Estimation immobiliere</span>
+      </a>
+      <nav class="nav">
+        <a href="{{ url_for('index') }}" class="{{ 'active' if request.endpoint == 'index' or request.endpoint == 'predict_route' }}">Nouvelle estimation</a>
+        <a href="{{ url_for('history') }}" class="{{ 'active' if request.endpoint == 'history' }}">Historique</a>
+        <a href="{{ url_for('model_info') }}" class="{{ 'active' if request.endpoint == 'model_info' }}">Modele</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert {{ 'alert-error' if category == 'error' else 'alert-info' }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer>
+    Modele XGBoost entraine sur {{ meta.n_samples }} logements (Boston Housing).
+    R&sup2; test = {{ metrics.r2_test }} &middot; MAE = {{ metrics.mae_test }} k$.
+    Application locale, aucune donnee n'est envoyee sur internet.
+  </footer>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Modele — Estimation immobiliere{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Le modele</h1>
+  <p>XGBoost Regressor entraine sur {{ meta.n_samples }} logements du jeu de donnees Boston Housing.</p>
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <div class="k">R&sup2; (test)</div>
+    <div class="v">{{ metrics.r2_test }}</div>
+  </div>
+  <div class="stat">
+    <div class="k">MAE (test)</div>
+    <div class="v">{{ metrics.mae_test }} k$</div>
+  </div>
+  <div class="stat">
+    <div class="k">Entrainement</div>
+    <div class="v">{{ metrics.n_train }} lignes</div>
+  </div>
+  <div class="stat">
+    <div class="k">Test</div>
+    <div class="v">{{ metrics.n_test }} lignes</div>
+  </div>
+  <div class="stat">
+    <div class="k">Estimations enregistrees</div>
+    <div class="v">{{ n_history }}</div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:20px">
+  <h2 class="card-title">Variables d'entree</h2>
+  <p class="card-sub">
+    Plages observees dans les donnees d'entrainement. Le formulaire refuse les valeurs hors plage.
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Variable</th>
+          <th>Description</th>
+          <th>Unite</th>
+          <th class="num">Min</th>
+          <th class="num">Mediane</th>
+          <th class="num">Max</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for f in features %}
+          <tr>
+            <td><span class="code">{{ f.name }}</span></td>
+            <td style="white-space:normal">{{ f.label }}</td>
+            <td class="muted">{{ f.unit or '—' }}</td>
+            <td class="num">{{ f.min }}</td>
+            <td class="num">{{ f.median }}</td>
+            <td class="num">{{ f.max }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <h2 class="card-title">Variable cible</h2>
+  <p class="card-sub">Prix median des logements (MEDV), exprime en milliers de dollars.</p>
+  <div class="stats">
+    <div class="stat"><div class="k">Minimum</div><div class="v">{{ meta.target.min }} k$</div></div>
+    <div class="stat"><div class="k">Mediane</div><div class="v">{{ meta.target.median }} k$</div></div>
+    <div class="stat"><div class="k">Moyenne</div><div class="v">{{ meta.target.mean }} k$</div></div>
+    <div class="stat"><div class="k">Maximum</div><div class="v">{{ meta.target.max }} k$</div></div>
+  </div>
+</div>
+{% endblock %}

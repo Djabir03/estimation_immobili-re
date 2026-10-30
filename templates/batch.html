@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Estimations par lot — Estimation immobiliere{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Estimations par lot</h1>
+  <p>
+    {{ results|length }} logement(s) estime(s)
+    {%- if ignored %} &middot; {{ ignored }} ligne(s) ignoree(s) (valeurs non numeriques){% endif %}.
+  </p>
+</div>
+
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Ligne CSV</th>
+          <th class="num">Prix estime</th>
+          <th class="num">Prix ($)</th>
+          {% for name in feature_names %}
+            <th class="num">{{ name }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in results %}
+          <tr>
+            <td class="muted">{{ r.line }}</td>
+            <td class="num"><strong>{{ "%.2f"|format(r.price) }}</strong> k$</td>
+            <td class="num">{{ (r.price * 1000)|round|int }}</td>
+            {% for name in feature_names %}
+              <td class="num muted">{{ r.values[name] }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="inline-actions" style="margin-top:22px">
+  <a href="{{ url_for('index') }}" class="btn btn-primary">Nouvelle estimation</a>
+</div>
+{% endblock %}
